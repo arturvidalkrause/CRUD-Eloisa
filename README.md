@@ -13,10 +13,10 @@ O projeto utiliza a biblioteca **CustomTkinter** para criar uma interface gráfi
 * **Gestão de Perfil:** O usuário logado pode visualizar e atualizar suas informações de cadastro.
 * **CRUD de Clientes:** Visualização de clientes em tabela e funcionalidade de exclusão em massa.
 * **CRUD de Imóveis:**
-    * Visualização de imóveis em tabela.
-    * Formulário para adicionar novos imóveis.
-    * Formulário para atualizar imóveis existentes.
-    * Funcionalidade de exclusão em massa.
+	* Visualização de imóveis em tabela.
+	* Formulário para adicionar novos imóveis.
+	* Formulário para atualizar imóveis existentes.
+	* Funcionalidade de exclusão em massa.
 * **Importação de Dados:** Tela para carregar arquivos de dados (.xlsx, .csv) para dentro do sistema.
 * **Configurações da Aplicação:** Opção para alternar entre os temas Claro (Light) e Escuro (Dark) em tempo real.
 
@@ -38,30 +38,30 @@ O sistema espera encontrar os seguintes arquivos (que podem ser carregados pela 
 ## Como Instalar e Executar o Projeto
 
 1.  **Clone o repositório:**
-    ```bash
-    git clone [git@github.com:arturvidalkrause/CRUD-Eloisa.git](git@github.com:arturvidalkrause/CRUD-Eloisa.git)
-    cd APP
-    ```
+	```bash
+	git clone [git@github.com:arturvidalkrause/CRUD-Eloisa.git](git@github.com:arturvidalkrause/CRUD-Eloisa.git)
+	cd APP
+	```
 
 2.  **Crie e ative um ambiente virtual:**
-    ```bash
-    # Criar o ambiente
-    python -m venv .venv
+	```bash
+	# Criar o ambiente
+	python -m venv .venv
 
-    # Ativar no Windows (PowerShell)
-    .\.venv\Scripts\Activate.ps1
-    ```
+	# Ativar no Windows (PowerShell)
+	.\.venv\Scripts\Activate.ps1
+	```
 
 3.  **Instale as dependências:**
-    Certifique-se de que o arquivo `requirements.txt` está na pasta raiz e execute:
-    ```bash
-    pip install -r requirements.txt
-    ```
+	Certifique-se de que o arquivo `requirements.txt` está na pasta raiz e execute:
+	```bash
+	pip install -r requirements.txt
+	```
 
 4.  **Execute a aplicação:**
-    ```bash
-    python app/main.py
-    ```
+	```bash
+	python app/main.py
+	```
 
 ## Uso
 
