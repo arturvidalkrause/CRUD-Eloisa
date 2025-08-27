@@ -1,8 +1,16 @@
 import customtkinter as ctk
 from PIL import Image
 import os
+import pyglet
 from ui.frames.login_frame import LoginFrame
 from ui.frames.register_frame import RegisterFrame 
+
+try:
+	font_path = os.path.join(os.path.dirname(__file__), "assets", "fonts", "Font Awesome 7 Free-Regular-400.otf")
+	pyglet.font.add_file(font_path)
+except Exception as e:
+	print(f"Erro ao carregar a fonte de ícones: {e}")
+	print("Os ícones podem não ser exibidos corretamente.")
 
 class App(ctk.CTk):
 	def __init__(self):

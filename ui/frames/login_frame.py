@@ -4,12 +4,21 @@ import os
 from tkinter import messagebox
 from core.crud_operations import autenticar_usuario
 from ui.main_application import MainApplication
-from tkinter import messagebox
 
 class LoginFrame(ctk.CTkFrame):
 	def __init__(self, master):
-		super().__init__(master)
+		super().__init__(master) 
 		self.master = master
+
+		assets_path = os.path.join(os.path.dirname(__file__), "../..", "assets")
+		image_path = os.path.join(assets_path, "images", "background.jpg")
+
+		self.bg_image = ctk.CTkImage(Image.open(image_path), size=(1024, 768))
+		self.bg_label = ctk.CTkLabel(self, image=self.bg_image, text="")
+		self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
+		
+		# bind para redimensionar a imagem
+		self.bind("<Configure>", self.on_resize)
 
 		font_path = os.path.join(os.path.dirname(__file__), "..", "assets", "fonts")
 		self.font_poppins_regular = ctk.CTkFont(family="Poppins", size=14)
@@ -17,12 +26,12 @@ class LoginFrame(ctk.CTkFrame):
 		self.logo_font = ctk.CTkFont(family="IBM Plex Sans Condensed", size=48, weight="bold")
 		
 		assets_path = os.path.join(os.path.dirname(__file__), "../..", "assets")
-		self.logo_icon = ctk.CTkImage(light_image=Image.open(os.path.join(assets_path, "icons", "logo_icon.png")), size=(30, 30))
+		self.logo_icon = ctk.CTkImage(light_image=Image.open(os.path.join(assets_path, "icons", "home.png")), size=(30, 30))
 		self.email_icon = ctk.CTkImage(light_image=Image.open(os.path.join(assets_path, "icons", "email_icon.png")), size=(20, 20))
 		self.password_icon = ctk.CTkImage(light_image=Image.open(os.path.join(assets_path, "icons", "password_icon.png")), size=(20, 20))
 
-		login_content_frame = ctk.CTkFrame(self, fg_color="#FFFFFF", corner_radius=15)
-		login_content_frame.place(relx=0.5, rely=0.5, anchor="center")
+		login_content_frame = ctk.CTkFrame(self, fg_color="#FFFFFF", corner_radius=0)
+		login_content_frame.place(relx=0.75, rely=0.5, anchor="center")
 
 		logo_frame = ctk.CTkFrame(login_content_frame, fg_color="transparent")
 		logo_frame.pack(pady=(40, 20), padx=100)
@@ -54,6 +63,10 @@ class LoginFrame(ctk.CTkFrame):
 		forgot_password_link.pack(side="left")
 		register_link = ctk.CTkButton(bottom_frame, text="Registrar", font=self.font_poppins_regular, fg_color="transparent", text_color="#FF0000", hover=False, command=self.register_action)
 		register_link.pack(side="right")
+
+	
+	def on_resize(self, event):
+		self.bg_image.configure(size=(event.width, event.height))
 		
 	def login_action(self):
 		"""
