@@ -4,6 +4,7 @@ class FilterImovelFrame(ctk.CTkFrame):
 	def __init__(self, master, controller, app):
 		super().__init__(master, fg_color="transparent")
 		self.controller = controller
+		self.app = app
 		ctk.CTkLabel(self, text="Detalhamento Geo Imóvel | Filtro", font=("Poppins", 24, "bold")).pack(pady=20, anchor="w")
 		self.entry_endereco = self.create_entry("Filtrar por Endereço...")
 		self.entry_cep = self.create_entry("Filtrar por CEP...")

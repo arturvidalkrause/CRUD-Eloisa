@@ -3,9 +3,10 @@ from tkinter import messagebox
 from core.crud_operations import add_new_imovel
 
 class AddImovelFrame(ctk.CTkFrame):
-	def __init__(self, master, controller):
+	def __init__(self, master, controller, app):
 		super().__init__(master, fg_color="transparent")
 		self.controller = controller
+		self.app = app
 
 		ctk.CTkLabel(self, text="Detalhamento Geo Imóvel | Adicionar", font=("Poppins", 24, "bold")).pack(pady=20, anchor="w")
 		

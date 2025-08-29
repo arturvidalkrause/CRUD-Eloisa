@@ -6,7 +6,7 @@ from .filter_imovel_frame import FilterImovelFrame
 from .update_imovel_frame import UpdateImovelFrame
 
 class DetalhamentoGeoFrame(ctk.CTkFrame):
-	def __init__(self, master):
+	def __init__(self, master, app):
 		super().__init__(master, fg_color="transparent")
 		self.app = app
 		
@@ -18,6 +18,7 @@ class DetalhamentoGeoFrame(ctk.CTkFrame):
 		top_frame = ctk.CTkFrame(self.table_view, fg_color="transparent")
 		top_frame.pack(fill="x", padx=20, pady=(10, 5))
 		ctk.CTkLabel(top_frame, text="Detalhamento Geo Imóvel", font=("Poppins", 24, "bold")).pack(side="left")
+		ctk.CTkButton(top_frame, text="Limpar Filtro", command=self.show_table_view, fg_color="gray").pack(side="right", padx=(5, 0))
 		ctk.CTkButton(top_frame, text="Adicionar", command=self.show_add_form).pack(side="right", padx=(0, 5))
 		ctk.CTkButton(top_frame, text="Filtro", command=self.show_filter_form).pack(side="right", padx=(0, 5))
 		

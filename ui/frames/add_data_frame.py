@@ -6,8 +6,9 @@ import os
 import shutil
 
 class AddDataFrame(ctk.CTkFrame):
-	def __init__(self, master):
+	def __init__(self, master, app):
 		super().__init__(master, fg_color="transparent")
+		self.app = app
 
 		self.DATA_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'data')
 

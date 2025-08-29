@@ -17,7 +17,7 @@ class LoginFrame(ctk.CTkFrame):
 		self.bg_label = ctk.CTkLabel(self, image=self.bg_image, text="")
 		self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 		
-		# bind para redimensionar a imagem
+
 		self.bind("<Configure>", self.on_resize)
 
 		font_path = os.path.join(os.path.dirname(__file__), "..", "assets", "fonts")
@@ -39,21 +39,21 @@ class LoginFrame(ctk.CTkFrame):
 		logo_text_a = ctk.CTkLabel(logo_frame, text="A", font=self.logo_font, text_color="#000000").pack(side="left")
 		logo_text_4g = ctk.CTkLabel(logo_frame, text="4G", font=self.logo_font, text_color="#FF0000").pack(side="left")
 
-		# Campo do Email
+
 		email_entry_frame = ctk.CTkFrame(login_content_frame, fg_color="transparent")
 		email_entry_frame.pack(pady=10, padx=30, fill="x")
 		email_icon_label = ctk.CTkLabel(email_entry_frame, image=self.email_icon, text="").pack(side="left", padx=(0,10))
 		self.email_entry = ctk.CTkEntry(email_entry_frame, placeholder_text="Email", font=self.font_poppins_regular, fg_color="#F0F0F0", border_width=0, height=40)
 		self.email_entry.pack(side="left", fill="x", expand=True)
 
-		# Campo da Senha
+
 		password_entry_frame = ctk.CTkFrame(login_content_frame, fg_color="transparent")
 		password_entry_frame.pack(pady=10, padx=30, fill="x")
 		password_icon_label = ctk.CTkLabel(password_entry_frame, image=self.password_icon, text="").pack(side="left", padx=(0,10))
 		self.password_entry = ctk.CTkEntry(password_entry_frame, placeholder_text="Senha", show="*", font=self.font_poppins_regular, fg_color="#F0F0F0", border_width=0, height=40)
 		self.password_entry.pack(side="left", fill="x", expand=True)
 
-		# Botão de Login
+
 		login_button = ctk.CTkButton(login_content_frame, text="Login", font=self.font_poppins_bold, height=45, corner_radius=25, command=self.login_action)
 		login_button.pack(pady=(30, 20), padx=30, fill="x")
 
@@ -75,7 +75,7 @@ class LoginFrame(ctk.CTkFrame):
 		email = self.email_entry.get()
 		password = self.password_entry.get()
 		
-		# Logica do login simulada
+
 		if email and password:
 			print("Login bem-sucedido!")
 			

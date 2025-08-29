@@ -3,8 +3,9 @@ from tkinter import ttk, messagebox
 from core.crud_operations import get_all_clients, delete_clients_by_cpf
 
 class ClientsFrame(ctk.CTkFrame):
-	def __init__(self, master):
+	def __init__(self, master, app):
 		super().__init__(master, fg_color="transparent")
+		self.app = app
 		
 		top_frame = ctk.CTkFrame(self, fg_color="transparent")
 		top_frame.pack(fill="x", padx=20, pady=10)

@@ -3,8 +3,9 @@ from tkinter import messagebox
 from core.crud_operations import get_user_data, update_user_data
 
 class ProfileFrame(ctk.CTkFrame):
-	def __init__(self, master):
+	def __init__(self, master, app):
 		super().__init__(master, fg_color="transparent")
+		self.app = app 
 		
 		self.main_app = master.master
 

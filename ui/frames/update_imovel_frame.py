@@ -3,9 +3,10 @@ from tkinter import messagebox
 from core.crud_operations import update_imovel_data
 
 class UpdateImovelFrame(ctk.CTkFrame):
-	def __init__(self, master, controller):
+	def __init__(self, master, controller, app):
 		super().__init__(master, fg_color="transparent")
 		self.controller = controller
+		self.app = app
 		self.original_endereco = None # Armazena o identificador do imovel que esta sendo editado
 
 		ctk.CTkLabel(self, text="Detalhamento Geo Imóvel | Atualizar", font=("Poppins", 24, "bold")).pack(pady=20, anchor="w")

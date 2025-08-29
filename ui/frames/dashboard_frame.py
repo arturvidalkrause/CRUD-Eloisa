@@ -40,8 +40,9 @@ class MatplotlibBarChart(ctk.CTkFrame):
 		canvas.get_tk_widget().grid(row=1, column=0, padx=10, pady=5, sticky="nsew")
 
 class DashboardFrame(ctk.CTkFrame):
-	def __init__(self, master):
+	def __init__(self, master, app):
 		super().__init__(master, fg_color="transparent")
+		self.app = app
 		self.grid_columnconfigure((0, 1, 2, 3), weight=1)
 
 		kpis = get_kpi_data()

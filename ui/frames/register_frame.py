@@ -77,14 +77,14 @@ class RegisterFrame(ctk.CTkFrame):
 		entry_frame = ctk.CTkFrame(parent, fg_color="transparent")
 		entry_frame.pack(pady=5, padx=30, fill="x")
 		
-		icon_label = ctk.CTkLabel(
-			entry_frame,
-			text=icon_unicode,
-			font=self.icon_font,
-			text_color="#555555",
-			width=20
-		)
-		icon_label.pack(side="left", padx=(0,10))
+		# icon_label = ctk.CTkLabel(
+		# 	entry_frame,
+		# 	text=icon_unicode,
+		# 	font=self.icon_font,
+		# 	text_color="#555555",
+		# 	width=20
+		# )
+		# icon_label.pack(side="left", padx=(0,10))
 		
 		entry = ctk.CTkEntry(entry_frame, placeholder_text=placeholder, font=self.font_poppins_regular,
 							 fg_color="#F0F0F0", border_width=0, height=40, show=show)
