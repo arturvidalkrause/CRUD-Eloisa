@@ -1,0 +1,8 @@
+ID do Imóvel (Endereço),ID do Cliente (CPF),Data de Início,Data de Fim,Valor do Aluguel,Tipo de Contrato
+Rua Barata Ribeiro,11122233344,2024-02-15,2026-08-14,3500,Residencial
+Rua do Lavradio,33344455566,2024-03-01,2027-02-28,2200,Comercial
+Rua Dias Ferreira,55566677788,2024-05-20,2026-11-19,15000,Residencial
+Av. Pastor Martin Luther King Jr.,22233344455,2024-07-10,2026-01-09,1800,Residencial
+Rua Barata Ribeiro,44455566677,2024-12-20,2025-03-20,4500,Temporada
+Rua do Lavradio,11122233344,2025-01-10,2028-01-09,2300,Comercial
+Rua Dias Ferreira,33344455566,2025-02-25,2025-05-24,18000,Temporada

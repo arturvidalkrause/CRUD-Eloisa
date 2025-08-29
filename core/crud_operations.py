@@ -6,20 +6,24 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data')
 
 USER_DATA_PATH = os.path.join(DATA_DIR, 'database_usuarios.xlsx')
 
-
-
-def safe_read_excel(filename):
-	"""Lê um arquivo Excel de forma segura, retornando um DataFrame vazio se não existir."""
+def safe_read_data(filename):
+	"""
+	Lê um arquivo de dados (Excel ou CSV) de forma segura.
+	"""
 	path = os.path.join(DATA_DIR, filename)
-	if os.path.exists(path):
-		try:
+	if not os.path.exists(path):
+		return pd.DataFrame() # Retorna um DataFrame vazio se o arquivo não existe
+	
+	try:
+		if filename.endswith(('.xlsx', '.xls')):
 			return pd.read_excel(path)
-		except Exception as e:
-			print(f"Erro ao ler o arquivo {filename}: {e}")
-			return pd.DataFrame()
+		elif filename.endswith('.csv'):
+			return pd.read_csv(path)
+	except Exception as e:
+		print(f"Erro ao ler o arquivo {filename}: {e}")
+		return pd.DataFrame()
+	
 	return pd.DataFrame()
-
-
 
 def criar_novo_registro(nome, sobrenome, cpf, email, senha):
 	novo_usuario = {"Nome": [nome], "Sobrenome": [sobrenome], "CPF": [cpf], "Email": [email], "Senha": [senha]}
@@ -45,7 +49,7 @@ def autenticar_usuario(email, senha):
 	return False
 
 def get_user_data(email):
-	df = safe_read_excel('database_usuarios.xlsx')
+	df = safe_read_data('database_usuarios.xlsx')
 	if not df.empty:
 		usuario_encontrado = df[df['Email'] == email]
 		if not usuario_encontrado.empty:
@@ -53,7 +57,7 @@ def get_user_data(email):
 	return None
 
 def update_user_data(email, new_data):
-	df = safe_read_excel('database_usuarios.xlsx')
+	df = safe_read_data('database_usuarios.xlsx')
 	if not df.empty:
 		user_index = df[df['Email'] == email].index
 		if not user_index.empty:
@@ -64,11 +68,11 @@ def update_user_data(email, new_data):
 	return {"status": "erro", "mensagem": "Usuário não encontrado."}
 
 def get_all_clients():
-	return safe_read_excel('database_usuarios.xlsx')
+	return safe_read_data('database_usuarios.xlsx')
 
 def delete_clients_by_cpf(cpfs_to_delete):
 	if not cpfs_to_delete: return {"status": "info", "mensagem": "Nenhum cliente selecionado."}
-	df = safe_read_excel('database_usuarios.xlsx')
+	df = safe_read_data('database_usuarios.xlsx')
 	rows_before = len(df)
 	df = df[~df['CPF'].isin(cpfs_to_delete)]
 	rows_after = len(df)
@@ -93,7 +97,13 @@ def add_new_imovel(imovel_data):
 		return {"status": "erro", "mensagem": f"Erro ao salvar imóvel: {e}"}
 
 def get_all_imoveis():
-	return safe_read_excel('imoveis_data.xlsx')
+	"""
+	Lê o arquivo de imóveis, procurando por .csv primeiro, depois .xlsx.
+	"""
+	df = safe_read_data('imoveis_data.csv')
+	if df.empty:
+		df = safe_read_data('imoveis_data.xlsx')
+	return df
 
 def delete_imoveis_by_endereco(enderecos_to_delete):
 	path = os.path.join(DATA_DIR, 'imoveis_data.xlsx')
@@ -121,7 +131,7 @@ def update_imovel_data(original_endereco, new_data):
 	return {"status": "erro", "mensagem": "Imóvel não encontrado para atualização."}
 
 def filter_imoveis(filters):
-	df = safe_read_excel('imoveis_data.xlsx')
+	df = safe_read_data('imoveis_data.xlsx')
 	if df.empty: return df
 	for column, value in filters.items():
 		if value:
@@ -155,4 +165,4 @@ def get_all_contratos():
 	"""
 	Lê o arquivo de contratos e retorna todos os dados como um DataFrame.
 	"""
-	return safe_read_excel('contratos.xlsx')
+	return safe_read_data('contratos.xlsx')

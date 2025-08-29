@@ -44,14 +44,12 @@ class AddDataFrame(ctk.CTkFrame):
 		Abre uma janela de diálogo para o usuário selecionar um arquivo
 		e o copia para a pasta 'data' do projeto.
 		"""
+		# (O início da função continua o mesmo)
 		file_path = filedialog.askopenfilename(
 			title="Selecione um arquivo de dados",
 			filetypes=(("Excel files", "*.xlsx *.xls"), ("CSV files", "*.csv"), ("All files", "*.*"))
 		)
-
-		if not file_path:
-			return
-
+		if not file_path: return
 		filename = os.path.basename(file_path)
 		destination_path = os.path.join(self.DATA_DIR, filename)
 
@@ -60,15 +58,16 @@ class AddDataFrame(ctk.CTkFrame):
 			messagebox.showinfo("Sucesso", f"Arquivo '{filename}' importado com sucesso!")
 			print(f"Arquivo copiado para: {destination_path}")
 
+			# --- MUDANÇA AQUI: Lógica de preview para CSV e Excel ---
+			df = None
 			if filename.endswith(('.xlsx', '.xls')):
 				df = pd.read_excel(destination_path)
+			elif filename.endswith('.csv'):
+				df = pd.read_csv(destination_path)
+			
+			if df is not None:
 				print("Preview dos dados importados:")
 				print(df.head())
 
 		except Exception as e:
 			messagebox.showerror("Erro", f"Ocorreu um erro ao importar o arquivo: {e}")
-
-	def download_model(self, model_name):
-		"""Placeholder para a funcionalidade de baixar modelos."""
-		print(f"Funcionalidade de baixar o '{model_name}' a ser implementada.")
-		messagebox.showinfo("Em desenvolvimento", "Esta funcionalidade ainda está em construção.")
