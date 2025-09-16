@@ -6,9 +6,11 @@ from core.crud_operations import autenticar_usuario
 from ui.main_application import MainApplication
 
 class LoginFrame(ctk.CTkFrame):
-	def __init__(self, master):
+	def __init__(self, master, app):
 		super().__init__(master) 
 		self.master = master
+		self.app = app
+
 
 		assets_path = os.path.join(os.path.dirname(__file__), "../..", "assets")
 		image_path = os.path.join(assets_path, "images", "background.jpg")
@@ -103,3 +105,7 @@ class LoginFrame(ctk.CTkFrame):
 			main_app.mainloop()
 		else:
 			messagebox.showerror("Erro de Login", "Email ou senha inválidos.")
+	
+	def forgot_password_action(self):
+		print("Link 'Esqueci minha senha' clicado")
+		self.master.show_frame("forgotpassword")

@@ -5,9 +5,10 @@ from core.crud_operations import criar_novo_registro
 from tkinter import messagebox
 
 class RegisterFrame(ctk.CTkFrame):
-	def __init__(self, master):
+	def __init__(self, master, app):
 		super().__init__(master) 
 		self.master = master
+		self.app = app
 
 		assets_path = os.path.join(os.path.dirname(__file__), "../..", "assets")
 		image_path = os.path.join(assets_path, "images", "background.jpg")

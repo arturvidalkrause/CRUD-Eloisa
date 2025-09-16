@@ -4,6 +4,7 @@ import os
 import pyglet
 from ui.frames.login_frame import LoginFrame
 from ui.frames.register_frame import RegisterFrame 
+from ui.frames.forgot_password_frame import ForgotPasswordFrame
 
 try:
 	font_path = os.path.join(os.path.dirname(__file__), "assets", "fonts", "Font Awesome 7 Free-Regular-400.otf")
@@ -31,10 +32,10 @@ class App(ctk.CTk):
 		self.bind("<Configure>", self.on_resize)
 		
 		self.frames = {}
-
-		for F in (LoginFrame, RegisterFrame):
-			page_name = F.__name__.lower().replace("frame", "") # "login", "register"
-			frame = F(master=self)
+		
+		for F in (LoginFrame, RegisterFrame, ForgotPasswordFrame):
+			page_name = F.__name__.lower().replace("frame", "")
+			frame = F(master=self, app=self) # Passando 'app' também
 			self.frames[page_name] = frame
 			frame.place(x=0, y=0, relwidth=1, relheight=1)
 
