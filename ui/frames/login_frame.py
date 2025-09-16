@@ -7,10 +7,9 @@ from ui.main_application import MainApplication
 
 class LoginFrame(ctk.CTkFrame):
 	def __init__(self, master, app):
-		super().__init__(master) 
+		super().__init__(master)
 		self.master = master
 		self.app = app
-
 
 		assets_path = os.path.join(os.path.dirname(__file__), "../..", "assets")
 		image_path = os.path.join(assets_path, "images", "background.jpg")
@@ -18,7 +17,6 @@ class LoginFrame(ctk.CTkFrame):
 		self.bg_image = ctk.CTkImage(Image.open(image_path), size=(1024, 768))
 		self.bg_label = ctk.CTkLabel(self, image=self.bg_image, text="")
 		self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
-		
 
 		self.bind("<Configure>", self.on_resize)
 

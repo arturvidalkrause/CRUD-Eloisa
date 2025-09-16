@@ -24,12 +24,10 @@ class MainApplication(ctk.CTk):
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
-        # --- MUDANÇA: O container principal da sidebar agora só segura os dois tipos de sidebars ---
         sidebar_container = ctk.CTkFrame(self, width=300, corner_radius=0, fg_color="transparent")
         sidebar_container.grid(row=0, column=0, sticky="nsw")
         sidebar_container.grid_rowconfigure(0, weight=1)
         
-        # --- MUDANÇA: Criando a nova sidebar principal com duas partes (ícones e texto) ---
         self.main_sidebar_frame = ctk.CTkFrame(sidebar_container, corner_radius=0, fg_color="transparent")
         self.main_sidebar_frame.grid(row=0, column=0, sticky="nsew")
         self.main_sidebar_frame.grid_columnconfigure(1, weight=1) # Permite que a área de texto se expanda

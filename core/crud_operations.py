@@ -48,6 +48,22 @@ def autenticar_usuario(email, senha):
 			return True
 	return False
 
+def autenticar_email(email):
+	if not os.path.exists(USER_DATA_PATH): return False
+	df = pd.read_excel(USER_DATA_PATH)
+	usuario_encontrado = df[df['Email'] == email]
+	return not usuario_encontrado.empty
+
+def atualizar_senha(email, nova_senha):
+	if not os.path.exists(USER_DATA_PATH): return {"status": "erro", "mensagem": "Arquivo de dados não encontrado."}
+	df = pd.read_excel(USER_DATA_PATH)
+	user_index = df[df['Email'] == email].index
+	if not user_index.empty:
+		df.loc[user_index, 'Senha'] = nova_senha
+		df.to_excel(USER_DATA_PATH, index=False)
+		return {"status": "sucesso", "mensagem": "Senha atualizada com sucesso!"}
+	return {"status": "erro", "mensagem": "Usuário não encontrado."}
+
 def get_user_data(email):
 	df = safe_read_data('database_usuarios.xlsx')
 	if not df.empty:
