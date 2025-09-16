@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from tkinter import messagebox
 from core.crud_operations import add_new_imovel
+from core.itbi_scraper import AutoCompleteITBI
 
 class AddImovelFrame(ctk.CTkFrame):
 	def __init__(self, master, controller, app):
@@ -10,10 +11,11 @@ class AddImovelFrame(ctk.CTkFrame):
 
 		ctk.CTkLabel(self, text="Detalhamento Geo Imóvel | Adicionar", font=("Poppins", 24, "bold")).pack(pady=20, anchor="w")
 		
+		self.entry_numero = self.create_entry("CEP")
+		self.entry_complemento = self.create_entry("Complemento")
+		self.entry_zona = self.create_entry("Zona")
 		self.entry_endereco = self.create_entry("Endereço")
 		self.entry_numero = self.create_entry("Número")
-		self.entry_complemento = self.create_entry("Complemento")
-		self.entry_cep = self.create_entry("CEP")
 		self.entry_zona = self.create_entry("Zona")
 
 		button_frame = ctk.CTkFrame(self, fg_color="transparent")

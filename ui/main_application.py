@@ -66,9 +66,9 @@ class MainApplication(ctk.CTk):
         assets_path = os.path.join(os.path.dirname(__file__), "..", "assets", "icons")
         self.icons = {}
         icon_files = {
-            "home": "home_icon.png", "crud": "crud_icon.png", "add_data": "add_data_icon.png",
-            "clients": "profile_icon.png", "profile": "profile_icon.png", "settings": "settings_icon.png",
-            "logout": "logout_icon.png", "support": "support_icon.png"
+            "home": "home_icon.png", "crud": "home_icon.png", "add_data": "home_icon.png",
+            "clients": "home_icon.png", "profile": "home_icon.png", "settings": "home_icon.png",
+            "logout": "home_icon.png", "support": "home_icon.png"
         }
 
         for name, filename in icon_files.items():
@@ -140,7 +140,7 @@ class MainApplication(ctk.CTk):
         self.create_sidebar_button(self.text_sidebar_frame, "Home", self.icons.get("home"), DashboardFrame, self.main_sidebar_buttons, 1, is_main=True)
         
         # O botão CRUD precisa de um comando especial
-        crud_button = ctk.CTkButton(self.text_sidebar_frame, text="CRUD", image=self.icons.get("crud")['dark'], compound="left", font=("Poppins", 16),
+        crud_button = ctk.CTkButton(self.text_sidebar_frame, text="CRUD", image=self.icons.get("crud"), compound="left", font=("Poppins", 16),
                                     fg_color="transparent", text_color="#5E5E5E", hover_color="#C0C0C0", anchor="w",
                                     command=self.show_crud_view, height=40, border_spacing=10)
         crud_button.grid(row=2, column=0, padx=15, pady=8, sticky="ew")
