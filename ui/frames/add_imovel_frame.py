@@ -45,7 +45,6 @@ class AddImovelFrame(ctk.CTkFrame):
                 self.entry_complemento.insert(0, data.get("complemento", ""))
 
                 self.entry_zona.delete(0, "end")
-                # exemplo: você pode usar bairro como zona
                 self.entry_zona.insert(0, data.get("bairro", ""))
 
                 messagebox.showinfo("Sucesso", f"Endereço encontrado: {data.get('logradouro', '')}")
