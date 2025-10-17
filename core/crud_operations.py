@@ -1,10 +1,12 @@
+import email
 import pandas as pd
 import os
+import re
 
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data')
 
-USER_DATA_PATH = os.path.join(DATA_DIR, 'database_usuarios.xlsx')
+USER_DATA_PATH = os.path.join(DATA_DIR, 'database_usuarios.csv')
 
 def safe_read_data(filename):
 	"""
@@ -25,24 +27,116 @@ def safe_read_data(filename):
 	
 	return pd.DataFrame()
 
+def validar_cpf(cpf):
+	if len(cpf) != 11 or not cpf.isdigit():
+		return False
+
+	soma1 = sum(int(cpf[i]) * (10 - i) for i in range(9))
+	resto1 = soma1 % 11
+	digito1 = 0 if resto1 < 2 else 11 - resto1
+
+	soma2 = sum(int(cpf[i]) * (11 - i) for i in range(10))
+	resto2 = soma2 % 11
+	digito2 = 0 if resto2 < 2 else 11 - resto2
+
+	validacao = cpf[-2:] == f"{digito1}{digito2}"
+
+	if validacao:
+		return True
+	else:
+		print("CPF inválido.")
+		return False
+
+def validar_email(email):
+	if not isinstance(email, str):
+		print("Email deve ser uma string.")
+		return (False, "Email deve ser uma string.")
+
+	email = email.strip()
+	if not email:
+		print("Email não pode ser vazio.")
+		return (False, "Email não pode ser vazio.")
+
+	if " " in email:
+		print("Email não deve conter espaços.")
+		return (False, "Email não deve conter espaços.")
+
+	if email.count("@") != 1:
+		print("Email deve conter exatamente um '@'.")
+		return (False, "Email deve conter exatamente um '@'.")
+
+	local, domain = email.split("@", 1)
+	if not local:
+		print("Parte local do email (antes do @) está vazia.")
+		return (False, "Parte local do email (antes do @) está vazia.")
+
+	if not domain or "." not in domain:
+		print("Domínio inválido: deve conter um ponto (ex: exemplo.com).")
+		return (False, "Domínio inválido: deve conter um ponto (ex: exemplo.com).")
+
+	if any(not part for part in domain.split(".")):
+		print("Domínio inválido: cada parte entre pontos deve ser preenchida.")
+		return (False, "Domínio inválido: cada parte entre pontos deve ser preenchida.")
+
+	# Verificação final com uma expressão regular simples para capturar formatos comuns
+	pattern = r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+	if not re.match(pattern, email):
+		print("Formato de email inválido.")
+		return (False, "Formato de email inválido.")
+
+	return (True, "email válido.")
+
+def validar_senha(senha):
+	if not isinstance(senha, str):
+		print("Senha deve ser uma string.")
+		return (False, "Senha deve ser uma string.")
+	if len(senha) < 8:
+		print("Senha deve ter pelo menos 8 caracteres.")
+		return (False, "Senha deve ter pelo menos 8 caracteres.")
+	has_letter = any(c.isalpha() for c in senha)
+	has_digit = any(c.isdigit() for c in senha)
+	if not has_letter or not has_digit:
+		print("Senha deve conter letras e números.")
+		return (False, "Senha deve conter letras e números.")
+	return (True, "Senha válida.")
+
 def criar_novo_registro(nome, sobrenome, cpf, email, senha):
+	if not nome or not sobrenome or not cpf or not email or not senha:
+		return {"status": "erro", "mensagem": "Todos os campos são obrigatórios."}
+	if not validar_cpf(cpf):
+		return {"status": "erro", "mensagem": "CPF inválido, cpf deve conter apenas números."}
+	if not validar_email(email)[0]:
+		return {"status": "erro", "mensagem": validar_email(email)[1]}
+	if not validar_senha(senha)[0]:
+		return {"status": "erro", "mensagem": validar_senha(senha)[1]}
+
+
 	novo_usuario = {"Nome": [nome], "Sobrenome": [sobrenome], "CPF": [cpf], "Email": [email], "Senha": [senha]}
 	novo_df = pd.DataFrame(novo_usuario)
 	try:
 		if os.path.exists(USER_DATA_PATH):
-			df_existente = pd.read_excel(USER_DATA_PATH)
+			df_existente = pd.read_csv(USER_DATA_PATH)
+			if email in df_existente['Email'].values:
+				return {"status": "erro", "mensagem": "Email já registrado."}
+			if cpf in df_existente['CPF'].values:
+				return {"status": "erro", "mensagem": "CPF já registrado."}
 			df_final = pd.concat([df_existente, novo_df], ignore_index=True)
 		else:
 			df_final = novo_df
-		df_final.to_excel(USER_DATA_PATH, index=False)
+		df_final.to_csv(USER_DATA_PATH, index=False)
 		return {"status": "sucesso", "mensagem": "Usuário registrado com sucesso!"}
 	except Exception as e:
 		return {"status": "erro", "mensagem": f"Erro ao salvar dados: {e}"}
 
 def autenticar_usuario(email, senha):
+	if not validar_email(email):
+		return False
+	if not validar_senha(senha):
+		return False
 	if not os.path.exists(USER_DATA_PATH): return False
-	df = pd.read_excel(USER_DATA_PATH)
+	df = pd.read_csv(USER_DATA_PATH)
 	usuario_encontrado = df[df['Email'] == email]
+
 	if not usuario_encontrado.empty:
 		if usuario_encontrado.iloc[0]['Senha'] == senha:
 			return True
@@ -50,22 +144,22 @@ def autenticar_usuario(email, senha):
 
 def autenticar_email(email):
 	if not os.path.exists(USER_DATA_PATH): return False
-	df = pd.read_excel(USER_DATA_PATH)
+	df = pd.read_csv(USER_DATA_PATH)
 	usuario_encontrado = df[df['Email'] == email]
 	return not usuario_encontrado.empty
 
 def atualizar_senha(email, nova_senha):
 	if not os.path.exists(USER_DATA_PATH): return {"status": "erro", "mensagem": "Arquivo de dados não encontrado."}
-	df = pd.read_excel(USER_DATA_PATH)
+	df = pd.read_csv(USER_DATA_PATH)
 	user_index = df[df['Email'] == email].index
 	if not user_index.empty:
 		df.loc[user_index, 'Senha'] = nova_senha
-		df.to_excel(USER_DATA_PATH, index=False)
+		df.to_csv(USER_DATA_PATH, index=False)
 		return {"status": "sucesso", "mensagem": "Senha atualizada com sucesso!"}
 	return {"status": "erro", "mensagem": "Usuário não encontrado."}
 
 def get_user_data(email):
-	df = safe_read_data('database_usuarios.xlsx')
+	df = safe_read_data(USER_DATA_PATH)
 	if not df.empty:
 		usuario_encontrado = df[df['Email'] == email]
 		if not usuario_encontrado.empty:
@@ -73,26 +167,26 @@ def get_user_data(email):
 	return None
 
 def update_user_data(email, new_data):
-	df = safe_read_data('database_usuarios.xlsx')
+	df = safe_read_data(USER_DATA_PATH)
 	if not df.empty:
 		user_index = df[df['Email'] == email].index
 		if not user_index.empty:
 			for key, value in new_data.items():
 				df.loc[user_index, key] = value
-			df.to_excel(USER_DATA_PATH, index=False)
+			df.to_csv(USER_DATA_PATH, index=False)
 			return {"status": "sucesso", "mensagem": "Dados atualizados com sucesso!"}
 	return {"status": "erro", "mensagem": "Usuário não encontrado."}
 
 def get_all_clients():
-	return safe_read_data('database_usuarios.xlsx')
+	return safe_read_data(USER_DATA_PATH)
 
 def delete_clients_by_cpf(cpfs_to_delete):
 	if not cpfs_to_delete: return {"status": "info", "mensagem": "Nenhum cliente selecionado."}
-	df = safe_read_data('database_usuarios.xlsx')
+	df = safe_read_data(USER_DATA_PATH)
 	rows_before = len(df)
 	df = df[~df['CPF'].isin(cpfs_to_delete)]
 	rows_after = len(df)
-	df.to_excel(USER_DATA_PATH, index=False)
+	df.to_csv(USER_DATA_PATH, index=False)
 	deleted_count = rows_before - rows_after
 	return {"status": "sucesso", "mensagem": f"{deleted_count} cliente(s) deletado(s) com sucesso!"}
 
