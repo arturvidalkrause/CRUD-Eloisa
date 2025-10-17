@@ -64,9 +64,9 @@ class MainApplication(ctk.CTk):
         assets_path = os.path.join(os.path.dirname(__file__), "..", "assets", "icons")
         self.icons = {}
         icon_files = {
-            "home": "home_icon.png", "crud": "home_icon.png", "add_data": "home_icon.png",
-            "clients": "home_icon.png", "profile": "home_icon.png", "settings": "home_icon.png",
-            "logout": "home_icon.png", "support": "home_icon.png"
+            "home": "home.png", "crud": "crud_icon.png", "add_data": "add_data_icon.png",
+            "clients": "profile_icon.png", "profile": "profile_icon.png", "settings": "settings_icon.png",
+            "logout": "logout_icon.png", "support": "support_icon.png"
         }
 
         for name, filename in icon_files.items():
