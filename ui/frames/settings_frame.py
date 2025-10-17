@@ -10,18 +10,13 @@ class SettingsFrame(ctk.CTkFrame):
 		options_frame.pack(fill="x", padx=40, pady=10)
 		options_frame.grid_columnconfigure(1, weight=1)
 
-		ctk.CTkLabel(options_frame, text="Tema:", font=("Poppins", 14)).grid(row=0, column=0, sticky="w", padx=(0, 20))
+		# ctk.CTkLabel(options_frame, text="Tema:", font=("Poppins", 14)).grid(row=0, column=0, sticky="w", padx=(0, 20))
 
-		theme_segmented_button = ctk.CTkSegmentedButton(options_frame, values=["Claro", "Escuro"], command=self.change_theme)
-		theme_segmented_button.set(ctk.get_appearance_mode().capitalize())
-		theme_segmented_button.grid(row=0, column=1, sticky="w")
-		ctk.CTkLabel(options_frame, text="Fonte:", font=("Poppins", 14)).grid(row=1, column=0, sticky="w", pady=(15, 0))
+		# font_segmented_button = ctk.CTkSegmentedButton(options_frame, values=["Pequena", "Média", "Grande"]); font_segmented_button.set("Média")
+		# font_segmented_button.grid(row=1, column=1, sticky="w", pady=(15, 0))
+		# ctk.CTkLabel(options_frame, text="Zoom:", font=("Poppins", 14)).grid(row=2, column=0, sticky="w", pady=(15, 0))
 
-		font_segmented_button = ctk.CTkSegmentedButton(options_frame, values=["Pequena", "Média", "Grande"]); font_segmented_button.set("Média")
-		font_segmented_button.grid(row=1, column=1, sticky="w", pady=(15, 0))
-		ctk.CTkLabel(options_frame, text="Zoom:", font=("Poppins", 14)).grid(row=2, column=0, sticky="w", pady=(15, 0))
-
-		ctk.CTkButton(options_frame, text="100%").grid(row=2, column=1, sticky="w", pady=(15, 0))
+		# ctk.CTkButton(options_frame, text="100%").grid(row=2, column=1, sticky="w", pady=(15, 0))
 		ctk.CTkLabel(options_frame, text="Exportar base de dados:", font=("Poppins", 14)).grid(row=3, column=0, sticky="w", pady=(15, 0))
 		export_db_frame = ctk.CTkFrame(options_frame, fg_color="transparent"); export_db_frame.grid(row=3, column=1, sticky="w", pady=(15, 0))
 

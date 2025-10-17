@@ -9,14 +9,10 @@ class RegistroImoveisFrame(ctk.CTkFrame):
 		
 		ctk.CTkLabel(self, text="Registro de Imóveis", font=("Poppins", 24, "bold")).pack(pady=20, padx=20, anchor="w")
 
-
 		scrollable_frame = ctk.CTkScrollableFrame(self, fg_color="transparent")
 		scrollable_frame.pack(fill="both", expand=True, padx=20)
 
-
 		self.entries = {}
-
-
 
 		campos = [
 			"Endereço", "Número", "Complemento", "CEP", "Bairro", "Cidade", "Estado",
