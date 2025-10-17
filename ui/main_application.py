@@ -142,7 +142,7 @@ class MainApplication(ctk.CTk):
         self.create_sidebar_button(self.text_sidebar_frame, "Home", self.icons.get("home"), DashboardFrame, self.main_sidebar_buttons, 1, is_main=True)
         
         # O botão CRUD precisa de um comando especial
-        crud_button = ctk.CTkButton(self.text_sidebar_frame, text="CRUD", image=self.icons.get("crud"), compound="left", font=("Poppins", 16),
+        crud_button = ctk.CTkButton(self.text_sidebar_frame, text="CRUD", image=self.icons.get("crud")['dark'], compound="left", font=("Poppins", 16),
                                     fg_color="transparent", text_color="#5E5E5E", hover_color="#C0C0C0", anchor="w",
                                     command=self.show_crud_view, height=40, border_spacing=10)
         crud_button.grid(row=2, column=0, padx=15, pady=8, sticky="ew")
