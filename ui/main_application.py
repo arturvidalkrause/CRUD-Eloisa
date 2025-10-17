@@ -30,21 +30,14 @@ class MainApplication(ctk.CTk):
         
         self.main_sidebar_frame = ctk.CTkFrame(sidebar_container, corner_radius=0, fg_color="transparent")
         self.main_sidebar_frame.grid(row=0, column=0, sticky="nsew")
-        self.main_sidebar_frame.grid_columnconfigure(1, weight=1) # Permite que a área de texto se expanda
-
-        # Faixa de ícones vermelha
-        self.icon_strip_frame = ctk.CTkFrame(self.main_sidebar_frame, width=60, corner_radius=0, fg_color="#c40000")
-        self.icon_strip_frame.grid(row=0, column=0, sticky="ns")
+        self.main_sidebar_frame.grid_columnconfigure(1, weight=1) 
         
-        # Área de texto cinza claro
         self.text_sidebar_frame = ctk.CTkFrame(self.main_sidebar_frame, corner_radius=0, fg_color="#EAEAEA")
         self.text_sidebar_frame.grid(row=0, column=1, sticky="nsew")
         
-        # Sidebar do CRUD (permanece a mesma, vermelha e única)
         self.crud_sidebar_frame = ctk.CTkFrame(sidebar_container, corner_radius=0, fg_color="#c40000")
         self.crud_sidebar_frame.grid(row=0, column=0, sticky="nsew")
 
-        # Área de Conteúdo
         self.content_frame = ctk.CTkFrame(self, fg_color="#F2F2F2")
         self.content_frame.grid(row=0, column=1, sticky="nsew")
         self.content_frame.grid_rowconfigure(0, weight=1)
@@ -71,10 +64,19 @@ class MainApplication(ctk.CTk):
 
         for name, filename in icon_files.items():
             path = os.path.join(assets_path, filename)
+            # DICA: Crie uma versão branca dos seus ícones, ex: "home_white.png"
+            white_path = os.path.join(assets_path, filename.replace(".png", "_white.png"))
+            
             try:
-                # --- MUDANÇA: Ícones da sidebar principal agora têm cores diferentes ---
                 dark_icon = ctk.CTkImage(Image.open(path).convert("RGBA"), size=(24, 24))
-                white_icon = ctk.CTkImage(Image.open(path).convert("RGBA"), size=(24, 24)) # Para o CRUD
+                
+                # Tenta carregar o ícone branco, se não encontrar, usa o preto como fallback
+                if os.path.exists(white_path):
+                    white_icon = ctk.CTkImage(Image.open(white_path).convert("RGBA"), size=(24, 24))
+                else:
+                    white_icon = dark_icon # Fallback
+                    print(f"AVISO: Ícone branco '{os.path.basename(white_path)}' não encontrado. Usando ícone padrão.")
+
                 self.icons[name] = {'dark': dark_icon, 'white': white_icon}
             except FileNotFoundError:
                 print(f"AVISO: Ícone '{filename}' não encontrado em '{assets_path}'.")
@@ -87,30 +89,32 @@ class MainApplication(ctk.CTk):
             frame.grid(row=0, column=0, sticky="nsew")
         self.frames[frame_class].tkraise()
     
-    # --- MUDANÇA: Lógica de seleção atualizada para o novo estilo ---
+    # --- MUDANÇA AQUI ---
     def select_button(self, selected_button, button_list, is_main_sidebar=True):
         for button in button_list:
-            if is_main_sidebar:
-                button.configure(fg_color="transparent", text_color="#5E5E5E")
-            else: # Estilo do CRUD sidebar
-                button.configure(fg_color="transparent")
+            # Reseta todos os botões para o estado padrão
+            button.configure(fg_color="transparent", corner_radius=0)
         
         if is_main_sidebar:
-            selected_button.configure(fg_color="#D3D3D3", text_color="#1C1C1C") # Cor de fundo e texto do item selecionado
+            # Estilo do menu principal (branco)
+            selected_button.configure(fg_color="#D3D3D3", text_color="#1C1C1C", corner_radius=8)
         else:
-            selected_button.configure(fg_color="#5E5E5E")
+            # Estilo do menu secundário (vermelho)
+            selected_button.configure(fg_color="#a60000", corner_radius=8) # Tom de vermelho mais escuro
 
+    # --- MUDANÇA AQUI ---
     def create_sidebar_button(self, parent, text, icon, frame_class, button_list, row, is_main=True):
         if is_main:
             button = ctk.CTkButton(parent, text=text, image=icon['dark'] if icon else None, compound="left", font=("Poppins", 16),
                                    fg_color="transparent", text_color="#5E5E5E", hover_color="#C0C0C0", anchor="w",
-                                   height=40, border_spacing=10)
+                                   height=40, border_spacing=10, corner_radius=0)
             button_list.append(button)
             button.configure(command=lambda b=button, fc=frame_class: self.select_and_show(b, fc, button_list, is_main_sidebar=True))
             button.grid(row=row, column=0, padx=15, pady=8, sticky="ew")
         else: # Estilo CRUD
             button = ctk.CTkButton(parent, text=text, image=icon['white'] if icon else None, compound="left", font=("Poppins", 14),
-                                   fg_color="transparent", text_color="white", hover_color="#a60000", anchor="w")
+                                   fg_color="transparent", text_color="white", hover_color="#b80000", anchor="w",
+                                   height=40, border_spacing=15, corner_radius=0) # Aumentei o border_spacing para alinhar melhor o texto
             button_list.append(button)
             button.configure(command=lambda b=button, fc=frame_class: self.select_and_show(b, fc, button_list, is_main_sidebar=False))
             button.grid(row=row, column=0, padx=20, pady=10, sticky="ew")
@@ -120,21 +124,21 @@ class MainApplication(ctk.CTk):
         if frame_class:
             self.show_frame(frame_class)
 
-    # --- MUDANÇA: Populando a nova sidebar de duas partes ---
     def populate_main_sidebar(self):
-        # Configuração do grid para empurrar itens para baixo
         self.text_sidebar_frame.grid_rowconfigure(5, weight=1)
-        self.icon_strip_frame.grid_rowconfigure(5, weight=1)
 
-        # Logo na área de texto
-        logo_frame = ctk.CTkFrame(self.text_sidebar_frame, fg_color="transparent")
-        logo_frame.grid(row=0, column=0, padx=15, pady=20, sticky="ew")
+        logo_container = ctk.CTkFrame(self.text_sidebar_frame, fg_color="transparent")
+        logo_container.grid(row=0, column=0, padx=15, pady=20, sticky="ew")
+        logo_container.grid_columnconfigure(0, weight=1)
+
+        logo_frame = ctk.CTkFrame(logo_container, fg_color="transparent")
+        logo_frame.grid(row=0, column=0)
+
         logo_label_a4g = ctk.CTkLabel(logo_frame, text="A4G", font=("Poppins", 30, "bold"), text_color="#c40000")
         logo_label_a4g.pack(side="left")
         logo_label_dash = ctk.CTkLabel(logo_frame, text="Dashboard", font=("Poppins", 18), text_color="#5E5E5E")
         logo_label_dash.pack(side="left", padx=5)
         
-        # Botões
         self.create_sidebar_button(self.text_sidebar_frame, "Home", self.icons.get("home"), DashboardFrame, self.main_sidebar_buttons, 1, is_main=True)
         
         # O botão CRUD precisa de um comando especial
@@ -144,10 +148,8 @@ class MainApplication(ctk.CTk):
         crud_button.grid(row=2, column=0, padx=15, pady=8, sticky="ew")
         
         self.create_sidebar_button(self.text_sidebar_frame, "Adicionar dados", self.icons.get("add_data"), AddDataFrame, self.main_sidebar_buttons, 3, is_main=True)
-        # O design não mostra "Clientes" na home, mas vou manter caso seja necessário. Se não for, pode remover.
         self.create_sidebar_button(self.text_sidebar_frame, "Clientes", self.icons.get("clients"), ClientsFrame, self.main_sidebar_buttons, 4, is_main=True)
         
-        # Botões inferiores
         self.create_sidebar_button(self.text_sidebar_frame, "Meu perfil", self.icons.get("profile"), ProfileFrame, self.main_sidebar_buttons, 6, is_main=True)
         self.create_sidebar_button(self.text_sidebar_frame, "Configurações", self.icons.get("settings"), SettingsFrame, self.main_sidebar_buttons, 7, is_main=True)
         self.create_sidebar_button(self.text_sidebar_frame, "Sair", self.icons.get("logout"), LogoutFrame, self.main_sidebar_buttons, 8, is_main=True)
@@ -156,29 +158,45 @@ class MainApplication(ctk.CTk):
 
     def populate_crud_sidebar(self):
         parent = self.crud_sidebar_frame
+        parent.grid_columnconfigure(0, weight=1)
         parent.grid_rowconfigure(8, weight=1)
+
         logo = ctk.CTkLabel(parent, text="A4G\nDashboard", font=("IBM Plex Sans Condensed", 30, "bold"), text_color="white")
-        logo.grid(row=0, column=0, padx=20, pady=20)
+        logo.grid(row=0, column=0, padx=20, pady=20, sticky="ew") 
         
-        back_button = ctk.CTkButton(parent, text="< Voltar para Home", command=self.show_main_view, fg_color="#a60000",
-                                    text_color="white", hover_color="#8f0000", anchor="w", font=("Poppins", 14))
+        # Novo botão "Voltar" estilizado
+        home_icon = self.icons.get("home", {}).get('white')
+        back_button = ctk.CTkButton(parent, 
+                                    text="Voltar ao Menu", 
+                                    image=home_icon,
+                                    compound="left",
+                                    command=self.show_main_view, 
+                                    fg_color="transparent",
+                                    text_color="white", 
+                                    hover_color="#b80000", 
+                                    anchor="w", 
+                                    font=("Poppins", 14),
+                                    height=40,
+                                    border_spacing=15)
         back_button.grid(row=1, column=0, padx=20, pady=(10, 20), sticky="ew")
         
-        # Usando a função auxiliar com is_main=False
+        # Botões de navegação do CRUD
         self.create_sidebar_button(parent, "Detalhamento Geo Imóvel", self.icons.get("crud"), DetalhamentoGeoFrame, self.crud_sidebar_buttons, 2, is_main=False)
         self.create_sidebar_button(parent, "Registro de Imóveis", self.icons.get("add_data"), RegistroImoveisFrame, self.crud_sidebar_buttons, 3, is_main=False)
         self.create_sidebar_button(parent, "Fluxo de caixa", self.icons.get("crud"), FluxoCaixaFrame, self.crud_sidebar_buttons, 4, is_main=False)
         self.create_sidebar_button(parent, "Contratos", self.icons.get("crud"), ContratosFrame, self.crud_sidebar_buttons, 5, is_main=False)
         self.create_sidebar_button(parent, "ITBI", self.icons.get("crud"), ItbiFrame, self.crud_sidebar_buttons, 6, is_main=False)
-
+        
     def show_main_view(self):
         self.main_sidebar_frame.tkraise()
-        # Seleciona o botão "Home" ao voltar para a view principal
         if self.main_sidebar_buttons:
-            self.select_and_show(self.main_sidebar_buttons[0], DashboardFrame, self.main_sidebar_buttons, is_main_sidebar=True)
+            # Seleciona o botão Home e aplica o corner_radius
+            home_button = self.main_sidebar_buttons[0]
+            self.select_button(home_button, self.main_sidebar_buttons, is_main_sidebar=True)
+            self.show_frame(DashboardFrame)
+
 
     def show_crud_view(self):
         self.crud_sidebar_frame.tkraise()
-        # Seleciona o primeiro item do CRUD ao entrar nesta view
         if self.crud_sidebar_buttons:
             self.select_and_show(self.crud_sidebar_buttons[0], DetalhamentoGeoFrame, self.crud_sidebar_buttons, is_main_sidebar=False)

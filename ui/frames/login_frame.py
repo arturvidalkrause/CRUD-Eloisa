@@ -69,16 +69,11 @@ class LoginFrame(ctk.CTkFrame):
 		self.bg_image.configure(size=(event.width, event.height))
 		
 	def login_action(self):
-		"""
-		MUDANÇA AQUI: Simula um login, fecha a janela atual e abre a principal.
-		"""
 		email = self.email_entry.get()
 		password = self.password_entry.get()
 		
 
 		if email and password:
-			print("Login bem-sucedido!")
-			
 			self.master.destroy() 
 			
 			main_app = MainApplication()
@@ -86,9 +81,6 @@ class LoginFrame(ctk.CTkFrame):
 			
 		else:
 			messagebox.showerror("Erro de Login", "Por favor, insira email e senha.")
-
-	def forgot_password_action(self):
-		print("Link 'Esqueci minha senha' clicado")
 
 	def register_action(self):
 		self.master.show_frame("register")
@@ -105,5 +97,4 @@ class LoginFrame(ctk.CTkFrame):
 			messagebox.showerror("Erro de Login", "Email ou senha inválidos.")
 	
 	def forgot_password_action(self):
-		print("Link 'Esqueci minha senha' clicado")
 		self.master.show_frame("forgotpassword")
