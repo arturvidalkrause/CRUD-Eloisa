@@ -100,13 +100,19 @@ class MainApplication(ctk.CTk):
         else:
             selected_button.configure(fg_color="#5E5E5E")
 
-    def create_sidebar_button(self, parent, text, icon, frame_class, button_list, row, is_main=True):
+
+    def create_sidebar_button(self, parent, text, icon, frame_class, button_list, row, is_main=True, command=None):
         if is_main:
             button = ctk.CTkButton(parent, text=text, image=icon['dark'] if icon else None, compound="left", font=("Poppins", 16),
                                    fg_color="transparent", text_color="#5E5E5E", hover_color="#C0C0C0", anchor="w",
                                    height=40, border_spacing=10)
             button_list.append(button)
-            button.configure(command=lambda b=button, fc=frame_class: self.select_and_show(b, fc, button_list, is_main_sidebar=True))
+            if command:
+                # Se um comando personalizado for fornecido, use-o
+                button.configure(command=lambda b=button: self.select_and_show(b, frame_class, button_list, is_main_sidebar=True, custom_command=command))
+            else:
+                # Caso contrário, use a lógica padrão para mostrar um frame
+                button.configure(command=lambda b=button, fc=frame_class: self.select_and_show(b, fc, button_list, is_main_sidebar=True))
             button.grid(row=row, column=0, padx=15, pady=8, sticky="ew")
         else: # Estilo CRUD
             button = ctk.CTkButton(parent, text=text, image=icon['white'] if icon else None, compound="left", font=("Poppins", 14),
@@ -115,9 +121,11 @@ class MainApplication(ctk.CTk):
             button.configure(command=lambda b=button, fc=frame_class: self.select_and_show(b, fc, button_list, is_main_sidebar=False))
             button.grid(row=row, column=0, padx=20, pady=10, sticky="ew")
 
-    def select_and_show(self, button, frame_class, button_list, is_main_sidebar):
+    def select_and_show(self, button, frame_class, button_list, is_main_sidebar, custom_command=None):
         self.select_button(button, button_list, is_main_sidebar)
-        if frame_class:
+        if custom_command:
+            custom_command() # Executa o comando personalizado
+        elif frame_class:
             self.show_frame(frame_class)
 
     # --- MUDANÇA: Populando a nova sidebar de duas partes ---
@@ -137,11 +145,13 @@ class MainApplication(ctk.CTk):
         # Botões
         self.create_sidebar_button(self.text_sidebar_frame, "Home", self.icons.get("home"), DashboardFrame, self.main_sidebar_buttons, 1, is_main=True)
         
-        # O botão CRUD precisa de um comando especial
-        crud_button = ctk.CTkButton(self.text_sidebar_frame, text="CRUD", image=self.icons.get("crud"), compound="left", font=("Poppins", 16),
-                                    fg_color="transparent", text_color="#5E5E5E", hover_color="#C0C0C0", anchor="w",
-                                    command=self.show_crud_view, height=40, border_spacing=10)
-        crud_button.grid(row=2, column=0, padx=15, pady=8, sticky="ew")
+        # Botões
+        self.create_sidebar_button(self.text_sidebar_frame, "Home", self.icons.get("home"), DashboardFrame, self.main_sidebar_buttons, 1, is_main=True)
+        
+        # Botão CRUD - Usando a função auxiliar create_sidebar_button com comando personalizado
+        self.create_sidebar_button(self.text_sidebar_frame, "CRUD", self.icons.get("crud"), None, self.main_sidebar_buttons, 2, is_main=True, command=self.show_crud_view)
+        
+        self.create_sidebar_button(self.text_sidebar_frame, "Adicionar dados", self.icons.get("add_data"), AddDataFrame, self.main_sidebar_buttons, 3, is_main=True)
         
         self.create_sidebar_button(self.text_sidebar_frame, "Adicionar dados", self.icons.get("add_data"), AddDataFrame, self.main_sidebar_buttons, 3, is_main=True)
         # O design não mostra "Clientes" na home, mas vou manter caso seja necessário. Se não for, pode remover.
